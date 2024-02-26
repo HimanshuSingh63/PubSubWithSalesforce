@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact form</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+    <link rel="stylesheet" href="publisher.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+
+</head>
+<body>
+    <div class="main-block">
+      <div class="left-part">
+        <i class="fas fa-envelope"></i>
+        <i class="fas fa-at"></i>
+        <i class="fas fa-mail-bulk"></i>
+      </div>
+      <form id="contactForm">
+        <h1>Contact Us</h1>
+        <div class="info">
+          <input class="fname" type="text" name="name" placeholder="Full name" required="True">
+          <input type="text" name="email" placeholder="Email">
+          <input type="text" name="phone" placeholder="Phone number">
+          <input type="text" name="website" placeholder="Website">
+        </div>
+        <p>Message</p>
+        <div>
+          <textarea name="message" rows="4"></textarea>
+        </div>
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+    <script>
+        document.getElementById('contactForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var name = document.querySelector('.fname').value;
+            var email = document.querySelector('input[name="email"]').value;
+            var phone = document.querySelector('input[name="phone"]').value;
+            var website = document.querySelector('input[name="website"]').value;
+            var message = document.querySelector('textarea[name="message"]').value;
+        
+            fetch('http://127.0.0.1:3000/saveData',{
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name: name,
+                    email: email,
+                    phone: phone,
+                    website: website,
+                    message: message
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message === 'Data Saved Successfully') {
+                    document.getElementById('contactForm').reset();
+                    
+                    window.location.href = '/ThankYou.html';
+                } else {
+                    console.error('Error:', data);
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        });
+        
+    </script>
+</body>
+</html>
